@@ -1,0 +1,64 @@
+name: aioCloud CI
+on: [push, pull_request]
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+      - name: Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15.x
+
+      - name: C++
+        uses: numworks/setup-msys2@v1
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Dependencies
+        run: |
+          go get -v -d -t ./...
+      - name: Build
+        shell: pwsh
+        run: |
+          .\scripts\CI.ps1
+      
+      - name: Run UPX
+        uses: crazy-max/ghaction-upx@v1
+        with:
+          version: latest
+          file: .\release\aiodns.bin
+          args: --ultra-brute
+
+      - name: Checksum
+        shell: pwsh
+        run: |
+          echo "::Set-Env Name=FILE_B_SHA256::$(.\scripts\SHA256.ps1 release\aiodns.bin)"
+          echo "::Set-Env Name=FILE_H_SHA256::$(.\scripts\SHA256.ps1 release\aiodns.h)"
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: Release
+          path: release
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          prerelease: false
+          draft: false
+          files: |
+            aiodns.bin
+            aiodns.h
+          body: |
+            [![](https://img.shields.io/badge/Telegram-频道-blue)](https://t.me/aioCloud_channel) [![](https://img.shields.io/badge/Telegram-群组-blue)](https://t.me/aioCloud)
+            ## 更新日志
+            * 将会很快更新
+            ## 校验和
+            | 文件名 | SHA256 |
+            | :-- | :-- |
+            | aiodns.bin | ${{ env.FILE_B_SHA256 }} |
+            | aiodns.h   | ${{ env.FILE_H_SHA256 }} |
