@@ -22,7 +22,7 @@ namespace AIODNSTester
         public static void Main(string[] args)
         {
             Console.WriteLine("[AIODNSTester][aiodns_dial]");
-            if (!aiodns_dial(Encoding.UTF8.GetBytes("D:\\china.conf"), Encoding.UTF8.GetBytes("223.5.5.5:53"), Encoding.UTF8.GetBytes("1.1.1.1:53")))
+            if (!aiodns_dial(Encoding.UTF8.GetBytes("D:\\china.conf"), Encoding.UTF8.GetBytes("119.29.29.29:53"), Encoding.UTF8.GetBytes("1.1.1.1:53")))
             {
                 Console.ReadLine();
                 return;
