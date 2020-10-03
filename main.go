@@ -17,8 +17,8 @@ var (
 	client = &dns.Client{Net: "tcp"}
 
 	ChinaCON = ""
-	ChinaDNS = "223.6.6.6:53"
-	OtherDNS = "8.8.8.8:53"
+	ChinaDNS = "119.29.29.29:53"
+	OtherDNS = "1.1.1.1:53"
 
 	ChinaList []string
 
