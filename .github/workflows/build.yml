@@ -36,8 +36,8 @@ jobs:
       - name: Checksum
         shell: pwsh
         run: |
-          echo "::Set-Env Name=FILE_B_SHA256::$(.\scripts\SHA256.ps1 release\aiodns.bin)"
-          echo "::Set-Env Name=FILE_H_SHA256::$(.\scripts\SHA256.ps1 release\aiodns.h)"
+          echo "::Set-Env Name=FILE_B_SHA256::$(.\scripts\SHA256.ps1 .\release\aiodns.bin)"
+          echo "::Set-Env Name=FILE_H_SHA256::$(.\scripts\SHA256.ps1 .\release\aiodns.h)"
 
       - name: Upload
         uses: actions/upload-artifact@v2
@@ -54,8 +54,8 @@ jobs:
           prerelease: false
           draft: false
           files: |
-            aiodns.bin
-            aiodns.h
+            .\release\aiodns.bin
+            .\release\aiodns.h
           body: |
             [![](https://img.shields.io/badge/Telegram-Group-blue)](https://t.me/aioCloud) [![](https://img.shields.io/badge/Telegram-Channel-green)](https://t.me/aioCloud_channel) 
             ## 更新日志
