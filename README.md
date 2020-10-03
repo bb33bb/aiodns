@@ -1,4 +1,7 @@
 # aiodns
+[![](https://img.shields.io/badge/Telegram-Group-blue)](https://t.me/aioCloud)
+[![](https://img.shields.io/badge/Telegram-Channel-green)](https://t.me/aioCloud_channel) 
+
 ```bash
 wget -O aiodns.conf https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf
 sed -i "s/server=\///" aiodns.conf
