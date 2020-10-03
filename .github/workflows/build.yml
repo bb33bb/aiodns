@@ -1,5 +1,6 @@
 name: aioCloud CI
 on: [push, pull_request]
+
 jobs:
   build:
     name: Build
@@ -11,18 +12,19 @@ jobs:
           go-version: 1.15.x
 
       - name: C++
-        uses: numworks/setup-msys2@v1
+        uses: msys2/setup-msys2@v1
 
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Dependencies
-        run: |
-          go get -v -d -t ./...
       - name: Build
         shell: pwsh
         run: |
-          .\scripts\CI.ps1
+          $Env:CGO_ENABLED=1
+          $Env:GOOS="windows"
+          $Env:GOARCH="amd64"
+          $Env:GOROOT_FINAL="/usr"
+          go build -a -trimpath -buildmode=c-shared -asmflags "-s -w" -ldflags "-s -w" -gcflags "-l=4" -o release/aiodns.bin
       
       - name: Run UPX
         uses: crazy-max/ghaction-upx@v1
@@ -36,6 +38,7 @@ jobs:
         run: |
           echo "::Set-Env Name=FILE_B_SHA256::$(.\scripts\SHA256.ps1 release\aiodns.bin)"
           echo "::Set-Env Name=FILE_H_SHA256::$(.\scripts\SHA256.ps1 release\aiodns.h)"
+
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
