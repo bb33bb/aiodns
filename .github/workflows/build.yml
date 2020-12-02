@@ -12,7 +12,7 @@ jobs:
           go-version: 1.15.x
 
       - name: C++
-        uses: msys2/setup-msys2@v1
+        uses: msys2/setup-msys2@v2
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -24,8 +24,8 @@ jobs:
           $Env:GOOS="windows"
           $Env:GOARCH="amd64"
           $Env:GOROOT_FINAL="/usr"
-          go build -a -trimpath -buildmode=c-shared -asmflags "-s -w" -ldflags "-s -w" -gcflags "-l=4" -o release/aiodns.bin
-      
+          go build -a -trimpath -buildmode=c-shared -asmflags "-s -w" -ldflags "-s -w" -o release/aiodns.bin
+
       - name: Run UPX
         uses: crazy-max/ghaction-upx@v1
         with:
@@ -36,8 +36,8 @@ jobs:
       - name: Checksum
         shell: pwsh
         run: |
-          echo "::Set-Env Name=FILE_B_SHA256::$(.\scripts\SHA256.ps1 .\release\aiodns.bin)"
-          echo "::Set-Env Name=FILE_H_SHA256::$(.\scripts\SHA256.ps1 .\release\aiodns.h)"
+          echo "FILE_B_SHA256=$(.\scripts\SHA256.ps1 .\release\aiodns.bin)" >> $GITHUB_ENV
+          echo "FILE_H_SHA256=$(.\scripts\SHA256.ps1 .\release\aiodns.h)" >> $GITHUB_ENV
 
       - name: Upload
         uses: actions/upload-artifact@v2
@@ -60,6 +60,7 @@ jobs:
             [![](https://img.shields.io/badge/Telegram-Group-blue)](https://t.me/aioCloud) [![](https://img.shields.io/badge/Telegram-Channel-green)](https://t.me/aioCloud_channel) 
             ## 更新日志
             * 将会很快更新
+
             ## 校验和
             | 文件名 | SHA256 |
             | :-- | :-- |
