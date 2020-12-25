@@ -4,6 +4,7 @@ import "C"
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"strings"
