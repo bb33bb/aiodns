@@ -2,8 +2,11 @@ package main
 
 import "C"
 import (
+	"bufio"
 	"fmt"
 	"log"
+	"os"
+	"strings"
 
 	"github.com/miekg/dns"
 )
@@ -21,8 +24,8 @@ var (
 	client = &dns.Client{Net: "tcp"}
 
 	ListenAddr = ":53"
-	ChinaDNS = "223.5.5.5:53"
-	OtherDNS = "1.1.1.1:53"
+	ChinaDNS   = "223.5.5.5:53"
+	OtherDNS   = "1.1.1.1:53"
 
 	ChinaList = make([]string, 0)
 
