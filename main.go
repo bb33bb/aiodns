@@ -2,25 +2,27 @@ package main
 
 import "C"
 import (
-	"bufio"
 	"fmt"
-	"io"
 	"log"
-	"os"
-	"strings"
 
-	"github.com/aiocloud/aiodns/tools"
 	"github.com/miekg/dns"
+)
+
+const (
+	TYPE_REST int = iota
+	TYPE_LIST
+	TYPE_CDNS
+	TYPE_ODNS
+	TYPE_METH
 )
 
 var (
 	client = &dns.Client{Net: "tcp"}
 
-	ChinaCON = ""
-	ChinaDNS = "119.29.29.29:53"
+	ChinaDNS = "223.5.5.5:53"
 	OtherDNS = "1.1.1.1:53"
 
-	ChinaList []string
+	ChinaList = make([]string, 0)
 
 	ServeMux  *dns.ServeMux
 	TCPSocket *dns.Server
@@ -28,40 +30,74 @@ var (
 )
 
 //export aiodns_dial
-func aiodns_dial(chinacon *C.char, chinadns *C.char, otherdns *C.char) bool {
-	ChinaCON = tools.String(C.GoString(chinacon))
-	ChinaDNS = tools.String(C.GoString(chinadns))
-	OtherDNS = tools.String(C.GoString(otherdns))
-	ChinaList = make([]string, 0)
+func aiodns_dial(name int, value *C.char) bool {
+	switch name {
+	case TYPE_REST:
+		{
+			ChinaDNS = "223.5.5.5:53"
+			OtherDNS = "1.1.1.1:53"
+			ChinaList = make([]string, 0)
 
-	fd, err := os.Open(ChinaCON)
-	if err != nil {
-		fmt.Printf("[aiodns][aiodns_dial][os.Open] %v\n", err)
-		return false
-	}
-	defer fd.Close()
+			if TCPSocket != nil {
+				TCPSocket.Shutdown()
 
-	br := bufio.NewReader(fd)
-	for {
-		data, _, err := br.ReadLine()
-		if err != nil {
-			if err != io.EOF {
-				fmt.Printf("[aiodns][aiodns_dial][br.ReadLine] %v\n", err)
-				return false
+				TCPSocket = nil
 			}
 
-			break
-		}
+			if UDPSocket != nil {
+				UDPSocket.Shutdown()
 
-		text := strings.TrimSpace(string(data))
-		if text != "" {
-			ChinaList = append(ChinaList, text)
+				UDPSocket = nil
+			}
+
+			ServeMux = nil
+
+			fmt.Println("[aiodns][aiodns_dial] TYPE_REST")
 		}
+	case TYPE_LIST:
+		{
+			fd, err := os.Open(C.GoString(value))
+			if err != nil {
+				return false
+			}
+			defer fd.Close()
+
+			br := bufio.NewReader(fd)
+			for {
+				data, _, err := br.ReadLine()
+				if err != nil {
+					if err != io.EOF {
+						fmt.Printf("[aiodns][aiodns_dial][br.ReadLine] %v\n", err)
+						return false
+					}
+
+					break
+				}
+
+				text := strings.TrimSpace(string(data))
+				if text != "" {
+					ChinaList = append(ChinaList, text)
+				}
+			}
+
+			fmt.Printf("[aiodns][aiodns_dial] TYPE_LIST => %s\n", C.GoString(value))
+		}
+	case TYPE_CDNS:
+		ChinaDNS = C.GoString(value)
+
+		fmt.Printf("[aiodns][aiodns_dial] TYPE_CDNS => %s\n", C.GoString(value))
+	case TYPE_ODNS:
+		OtherDNS = C.GoString(value)
+
+		fmt.Printf("[aiodns][aiodns_dial] TYPE_ODNS => %s\n", C.GoString(value))
+	case TYPE_METH:
+		client = &dns.Client{Net: C.GoString(value)}
+
+		fmt.Printf("[aiodns][aiodns_dial] TYPE_METH => %s\n", C.GoString(value))
+	default:
+		return false
 	}
 
-	fmt.Printf("[aiodns][aiodns_dial] ChinaCON => %s\n", ChinaCON)
-	fmt.Printf("[aiodns][aiodns_dial] ChinaDNS => %s\n", ChinaDNS)
-	fmt.Printf("[aiodns][aiodns_dial] OtherDNS => %s\n", OtherDNS)
 	return true
 }
 
