@@ -11,10 +11,19 @@ sed -i "s/\/114.114.114.114/./" aiodns.conf
 ```csharp
 namespace AIODNSTester
 {
+    public enum NameList : int
+    {
+        TYPE_REST,
+        TYPE_LIST,
+        TYPE_CDNS,
+        TYPE_ODNS,
+        TYPE_METH
+    }
+
     public class AIODNSTester
     {
         [DllImport("aiodns.bin", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool aiodns_dial(byte[] chinacon, byte[] chinadns, byte[] otherdns);
+        public static extern bool aiodns_dial(int name, byte[] value);
 
         [DllImport("aiodns.bin", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool aiodns_init();
@@ -25,11 +34,11 @@ namespace AIODNSTester
         public static void Main(string[] args)
         {
             Console.WriteLine("[AIODNSTester][aiodns_dial]");
-            if (!aiodns_dial(Encoding.UTF8.GetBytes("D:\\china.conf"), Encoding.UTF8.GetBytes("119.29.29.29:53"), Encoding.UTF8.GetBytes("1.1.1.1:53")))
-            {
-                Console.ReadLine();
-                return;
-            }
+            aiodns_dial((int)NameList.TYPE_REST, null);
+            aiodns_dial((int)NameList.TYPE_LIST, Encoding.UTF8.GetBytes("D:\\china.conf"));
+            aiodns_dial((int)NameList.TYPE_CDNS, Encoding.UTF8.GetBytes("223.5.5.5:53"));
+            aiodns_dial((int)NameList.TYPE_ODNS, Encoding.UTF8.GetBytes("1.1.1.1:53"));
+            aiodns_dial((int)NameList.TYPE_METH, Encoding.UTF8.GetBytes("TCP"));
             Console.ReadLine();
 
             Console.WriteLine("[AIODNSTester][aiodns_init]");
