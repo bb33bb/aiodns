@@ -14,6 +14,7 @@ namespace AIODNSTester
     public enum NameList : int
     {
         TYPE_REST,
+        TYPE_ADDR,
         TYPE_LIST,
         TYPE_CDNS,
         TYPE_ODNS,
@@ -34,11 +35,12 @@ namespace AIODNSTester
         public static void Main(string[] args)
         {
             Console.WriteLine("[AIODNSTester][aiodns_dial]");
-            aiodns_dial((int)NameList.TYPE_REST, null);
-            aiodns_dial((int)NameList.TYPE_LIST, Encoding.UTF8.GetBytes("D:\\china.conf"));
-            aiodns_dial((int)NameList.TYPE_CDNS, Encoding.UTF8.GetBytes("223.5.5.5:53"));
-            aiodns_dial((int)NameList.TYPE_ODNS, Encoding.UTF8.GetBytes("1.1.1.1:53"));
-            aiodns_dial((int)NameList.TYPE_METH, Encoding.UTF8.GetBytes("TCP"));
+            aiodns_dial((int)NameList.TYPE_REST, null);                                     // Reset
+            aiodns_dial((int)NameList.TYPE_ADDR, Encoding.UTF8.GetBytes(":53"));            // Listen Addr
+            aiodns_dial((int)NameList.TYPE_LIST, Encoding.UTF8.GetBytes("D:\\china.conf")); // China Domain Conf
+            aiodns_dial((int)NameList.TYPE_CDNS, Encoding.UTF8.GetBytes("223.5.5.5:53"));   // China DNS
+            aiodns_dial((int)NameList.TYPE_ODNS, Encoding.UTF8.GetBytes("1.1.1.1:53"));     // Other DNS
+            aiodns_dial((int)NameList.TYPE_METH, Encoding.UTF8.GetBytes("TCP"));            // Method
             Console.ReadLine();
 
             Console.WriteLine("[AIODNSTester][aiodns_init]");
