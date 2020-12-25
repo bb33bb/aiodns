@@ -10,6 +10,7 @@ import (
 
 const (
 	TYPE_REST int = iota
+	TYPE_ADDR
 	TYPE_LIST
 	TYPE_CDNS
 	TYPE_ODNS
@@ -19,6 +20,7 @@ const (
 var (
 	client = &dns.Client{Net: "tcp"}
 
+	ListenAddr = ":53"
 	ChinaDNS = "223.5.5.5:53"
 	OtherDNS = "1.1.1.1:53"
 
@@ -54,6 +56,10 @@ func aiodns_dial(name int, value *C.char) bool {
 
 			fmt.Println("[aiodns][aiodns_dial] TYPE_REST")
 		}
+	case TYPE_ADDR:
+		ListenAddr = C.GoString(value)
+
+		fmt.Printf("[aiodns][aiodns_dial] TYPE_ADDR => %s\n", C.GoString(value))
 	case TYPE_LIST:
 		{
 			fd, err := os.Open(C.GoString(value))
@@ -112,8 +118,8 @@ func aiodns_init() bool {
 
 	ServeMux.HandleFunc(".", handleOther)
 
-	TCPSocket = &dns.Server{Net: "tcp", Addr: ":53", Handler: ServeMux}
-	UDPSocket = &dns.Server{Net: "udp", Addr: ":53", Handler: ServeMux}
+	TCPSocket = &dns.Server{Net: "tcp", Addr: ListenAddr, Handler: ServeMux}
+	UDPSocket = &dns.Server{Net: "udp", Addr: ListenAddr, Handler: ServeMux}
 
 	go func() { _ = TCPSocket.ListenAndServe() }()
 	go func() { _ = UDPSocket.ListenAndServe() }()
