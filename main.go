@@ -45,13 +45,13 @@ func aiodns_dial(name int, value *C.char) bool {
 			ChinaList = make([]string, 0)
 
 			if TCPSocket != nil {
-				TCPSocket.Shutdown()
+				_ = TCPSocket.Shutdown()
 
 				TCPSocket = nil
 			}
 
 			if UDPSocket != nil {
-				UDPSocket.Shutdown()
+				_ = UDPSocket.Shutdown()
 
 				UDPSocket = nil
 			}
