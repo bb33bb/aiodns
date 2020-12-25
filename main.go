@@ -101,7 +101,7 @@ func aiodns_dial(name int, value *C.char) bool {
 
 		fmt.Printf("[aiodns][aiodns_dial] TYPE_ODNS => %s\n", C.GoString(value))
 	case TYPE_METH:
-		client = &dns.Client{Net: C.GoString(value)}
+		client = &dns.Client{Net: strings.ToLower(C.GoString(value))}
 
 		fmt.Printf("[aiodns][aiodns_dial] TYPE_METH => %s\n", C.GoString(value))
 	default:
