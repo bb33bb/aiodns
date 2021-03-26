@@ -25,7 +25,7 @@ var (
 	client = &dns.Client{Net: "tcp"}
 
 	ListenAddr = ":53"
-	ChinaDNS   = "223.5.5.5:53"
+	ChinaDNS   = "119.29.29.29:53"
 	OtherDNS   = "1.1.1.1:53"
 
 	ChinaList = make([]string, 0)
@@ -40,7 +40,7 @@ func aiodns_dial(name int, value *C.char) bool {
 	switch name {
 	case TYPE_REST:
 		{
-			ChinaDNS = "223.5.5.5:53"
+			ChinaDNS = "119.29.29.29:53"
 			OtherDNS = "1.1.1.1:53"
 			ChinaList = make([]string, 0)
 
