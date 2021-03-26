@@ -36,8 +36,8 @@ jobs:
       - name: Checksum
         shell: pwsh
         run: |
-          echo "FILE_B_SHA256=$(.\scripts\SHA256.ps1 .\release\aiodns.bin)" >> $GITHUB_ENV
-          echo "FILE_H_SHA256=$(.\scripts\SHA256.ps1 .\release\aiodns.h)" >> $GITHUB_ENV
+          echo "FILE_B_SHA256=$(.\scripts\SHA256.ps1 .\release\aiodns.bin)" | Out-File -FilePath $Env:GITHUB_ENV -Encoding UTF8 -Append
+          echo "FILE_H_SHA256=$(.\scripts\SHA256.ps1 .\release\aiodns.h  )" | Out-File -FilePath $Env:GITHUB_ENV -Encoding UTF8 -Append
 
       - name: Upload
         uses: actions/upload-artifact@v2
@@ -58,6 +58,7 @@ jobs:
             .\release\aiodns.h
           body: |
             [![](https://img.shields.io/badge/Telegram-Group-blue)](https://t.me/aioCloud) [![](https://img.shields.io/badge/Telegram-Channel-green)](https://t.me/aioCloud_channel) 
+
             ## 更新日志
             * 将会很快更新
 
