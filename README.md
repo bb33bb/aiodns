@@ -24,7 +24,7 @@ namespace AIODNSTester
     public class AIODNSTester
     {
         [DllImport("aiodns.bin", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool aiodns_dial(int name, byte[] value);
+        public static extern bool aiodns_dial(NameList name, byte[] value);
 
         [DllImport("aiodns.bin", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool aiodns_init();
@@ -35,11 +35,11 @@ namespace AIODNSTester
         public static void Main(string[] args)
         {
             Console.WriteLine("[AIODNSTester][aiodns_dial]");
-            aiodns_dial((int)NameList.TYPE_REST, null);                                              // Reset
-            aiodns_dial((int)NameList.TYPE_ADDR, Encoding.UTF8.GetBytes(":53"));                     // Listen Addr
-            aiodns_dial((int)NameList.TYPE_LIST, Encoding.UTF8.GetBytes("D:\\china.conf"));          // China Domain Conf
-            aiodns_dial((int)NameList.TYPE_CDNS, Encoding.UTF8.GetBytes("tcp://119.29.29.29:53"));   // China DNS
-            aiodns_dial((int)NameList.TYPE_ODNS, Encoding.UTF8.GetBytes("tls://1.1.1.1:853"));       // Other DNS
+            aiodns_dial(NameList.TYPE_REST, null);                                              // Reset
+            aiodns_dial(NameList.TYPE_ADDR, Encoding.UTF8.GetBytes(":53"));                     // Listen Addr
+            aiodns_dial(NameList.TYPE_LIST, Encoding.UTF8.GetBytes("D:\\china.conf"));          // China Domain Conf
+            aiodns_dial(NameList.TYPE_CDNS, Encoding.UTF8.GetBytes("tcp://119.29.29.29:53"));   // China DNS
+            aiodns_dial(NameList.TYPE_ODNS, Encoding.UTF8.GetBytes("tls://1.1.1.1:853"));       // Other DNS
             Console.ReadLine();
 
             Console.WriteLine("[AIODNSTester][aiodns_init]");
