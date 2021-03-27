@@ -18,7 +18,6 @@ const (
 	TYPE_LIST
 	TYPE_CDNS
 	TYPE_ODNS
-	TYPE_METH
 )
 
 var (
