@@ -17,8 +17,7 @@ namespace AIODNSTester
         TYPE_ADDR,
         TYPE_LIST,
         TYPE_CDNS,
-        TYPE_ODNS,
-        TYPE_METH
+        TYPE_ODNS
     }
 
     public class AIODNSTester
