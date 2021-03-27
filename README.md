@@ -35,12 +35,11 @@ namespace AIODNSTester
         public static void Main(string[] args)
         {
             Console.WriteLine("[AIODNSTester][aiodns_dial]");
-            aiodns_dial((int)NameList.TYPE_REST, null);                                     // Reset
-            aiodns_dial((int)NameList.TYPE_ADDR, Encoding.UTF8.GetBytes(":53"));            // Listen Addr
-            aiodns_dial((int)NameList.TYPE_LIST, Encoding.UTF8.GetBytes("D:\\china.conf")); // China Domain Conf
-            aiodns_dial((int)NameList.TYPE_CDNS, Encoding.UTF8.GetBytes("223.5.5.5:53"));   // China DNS
-            aiodns_dial((int)NameList.TYPE_ODNS, Encoding.UTF8.GetBytes("1.1.1.1:53"));     // Other DNS
-            aiodns_dial((int)NameList.TYPE_METH, Encoding.UTF8.GetBytes("TCP"));            // Method
+            aiodns_dial((int)NameList.TYPE_REST, null);                                              // Reset
+            aiodns_dial((int)NameList.TYPE_ADDR, Encoding.UTF8.GetBytes(":53"));                     // Listen Addr
+            aiodns_dial((int)NameList.TYPE_LIST, Encoding.UTF8.GetBytes("D:\\china.conf"));          // China Domain Conf
+            aiodns_dial((int)NameList.TYPE_CDNS, Encoding.UTF8.GetBytes("tcp://119.29.29.29:53"));   // China DNS
+            aiodns_dial((int)NameList.TYPE_ODNS, Encoding.UTF8.GetBytes("tls://1.1.1.1:853"));       // Other DNS
             Console.ReadLine();
 
             Console.WriteLine("[AIODNSTester][aiodns_init]");
