@@ -22,8 +22,6 @@ const (
 )
 
 var (
-	client = &dns.Client{Net: "tcp"}
-
 	ListenAddr = ":53"
 	ChinaDNS   = "119.29.29.29:53"
 	OtherDNS   = "1.1.1.1:53"
@@ -33,6 +31,9 @@ var (
 	ServeMux  *dns.ServeMux
 	TCPSocket *dns.Server
 	UDPSocket *dns.Server
+
+	CDNSClient = &dns.Client{Net: "tcp"}
+	ODNSClient = &dns.Client{Net: "tcp"}
 )
 
 //export aiodns_dial
@@ -93,17 +94,41 @@ func aiodns_dial(name int, value *C.char) bool {
 			fmt.Printf("[aiodns][aiodns_dial] TYPE_LIST => %s\n", C.GoString(value))
 		}
 	case TYPE_CDNS:
-		ChinaDNS = C.GoString(value)
+		{
+			s := strings.SplitN(C.GoString(value), "://", 2)
+			if len(s) != 2 {
+				ChinaDNS = C.GoString(value)
+			} else {
+				ChinaDNS = s[1]
+
+				switch s[0] {
+				case "tls":
+					CDNSClient.Net = "tcp-tls"
+				default:
+					CDNSClient.Net = "tcp"
+				}
+			}
+		}
 
 		fmt.Printf("[aiodns][aiodns_dial] TYPE_CDNS => %s\n", C.GoString(value))
 	case TYPE_ODNS:
-		OtherDNS = C.GoString(value)
+		{
+			s := strings.SplitN(C.GoString(value), "://", 2)
+			if len(s) != 2 {
+				OtherDNS = C.GoString(value)
+			} else {
+				OtherDNS = s[1]
+
+				switch s[0] {
+				case "tls":
+					ODNSClient.Net = "tcp-tls"
+				default:
+					ODNSClient.Net = "tcp"
+				}
+			}
+		}
 
 		fmt.Printf("[aiodns][aiodns_dial] TYPE_ODNS => %s\n", C.GoString(value))
-	case TYPE_METH:
-		client = &dns.Client{Net: strings.ToLower(C.GoString(value))}
-
-		fmt.Printf("[aiodns][aiodns_dial] TYPE_METH => %s\n", C.GoString(value))
 	default:
 		return false
 	}
@@ -168,7 +193,7 @@ func handleServerName(w dns.ResponseWriter, r *dns.Msg) {
 }
 
 func handleChina(w dns.ResponseWriter, r *dns.Msg) {
-	m, _, err := client.Exchange(r, ChinaDNS)
+	m, _, err := CDNSClient.Exchange(r, ChinaDNS)
 	if err != nil {
 		return
 	}
@@ -177,7 +202,7 @@ func handleChina(w dns.ResponseWriter, r *dns.Msg) {
 }
 
 func handleOther(w dns.ResponseWriter, r *dns.Msg) {
-	m, _, err := client.Exchange(r, OtherDNS)
+	m, _, err := ODNSClient.Exchange(r, OtherDNS)
 	if err != nil {
 		return
 	}
