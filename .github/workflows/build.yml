@@ -21,9 +21,9 @@ jobs:
         shell: pwsh
         run: |
           $Env:CGO_ENABLED=1
+          $Env:GOROOT_FINAL="/usr"
           $Env:GOOS="windows"
           $Env:GOARCH="amd64"
-          $Env:GOROOT_FINAL="/usr"
           go build -a -trimpath -buildmode=c-shared -asmflags "-s -w" -ldflags "-s -w" -o release/aiodns.bin
 
       - name: Run UPX
@@ -51,7 +51,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          prerelease: false
+          prerelease: true
           draft: false
           files: |
             .\release\aiodns.bin
