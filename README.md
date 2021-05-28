@@ -5,7 +5,7 @@
 ```bash
 wget -O aiodns.conf https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf
 sed -i "s/server=\///" aiodns.conf
-sed -i "s/\/114.114.114.114/./" aiodns.conf
+sed -i "s/\/114.114.114.114//" aiodns.conf
 ```
 
 ```csharp
