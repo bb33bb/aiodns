@@ -34,7 +34,7 @@ namespace AIODNSTester
         public static void Main(string[] args)
         {
             Console.WriteLine("[AIODNSTester][aiodns_dial]");
-            aiodns_dial(NameList.TYPE_REST, null);                                              // Reset
+            aiodns_dial(NameList.TYPE_REST, null);                      // Reset
             aiodns_dial(NameList.TYPE_ADDR, ":53");                     // Listen Addr
             aiodns_dial(NameList.TYPE_LIST, "D:\\china.conf");          // China Domain Conf
             aiodns_dial(NameList.TYPE_CDNS, "tcp://119.29.29.29:53");   // China DNS
