@@ -141,7 +141,7 @@ func aiodns_init() bool {
 	ServeMux.HandleFunc("in-addr.arpa.", handleServerName)
 
 	for i := 0; i < len(ChinaList); i++ {
-		ServeMux.HandleFunc(ChinaList[i], handleChina)
+		ServeMux.HandleFunc(dns.Fqdn(ChinaList[i]), handleChina)
 	}
 
 	ServeMux.HandleFunc(".", handleOther)
