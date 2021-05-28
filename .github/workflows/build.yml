@@ -26,13 +26,6 @@ jobs:
           $Env:GOARCH="amd64"
           go build -a -trimpath -buildmode=c-shared -asmflags "-s -w" -ldflags "-s -w" -o release/aiodns.bin
 
-      - name: Run UPX
-        uses: crazy-max/ghaction-upx@v1
-        with:
-          version: latest
-          file: .\release\aiodns.bin
-          args: --ultra-brute
-
       - name: Checksum
         shell: pwsh
         run: |
