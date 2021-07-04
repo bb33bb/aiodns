@@ -29,8 +29,8 @@ jobs:
       - name: Checksum
         shell: pwsh
         run: |
-          echo "FILE_B_SHA256=$(.\scripts\SHA256.ps1 .\release\aiodns.bin)" | Out-File -FilePath $Env:GITHUB_ENV -Encoding UTF8 -Append
-          echo "FILE_H_SHA256=$(.\scripts\SHA256.ps1 .\release\aiodns.h  )" | Out-File -FilePath $Env:GITHUB_ENV -Encoding UTF8 -Append
+          echo "FILE_B_SHA256=$(.\sha256.ps1 .\release\aiodns.bin)" | Out-File -FilePath $Env:GITHUB_ENV -Encoding UTF8 -Append
+          echo "FILE_H_SHA256=$(.\sha256.ps1 .\release\aiodns.h  )" | Out-File -FilePath $Env:GITHUB_ENV -Encoding UTF8 -Append
 
       - name: Upload
         uses: actions/upload-artifact@v2
